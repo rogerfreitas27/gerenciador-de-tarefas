@@ -14,11 +14,7 @@
             <div class="card text-center">
                 <div class="card-header">
                     <h2>
-                        @if (isset($tarefa))
-                            Editar
-                        @else
-                            Cadastrar
-                        @endif
+                       Remover Dev
                     </h2>
                     @include('snippets.error')
                 </div>
@@ -27,7 +23,7 @@
 
 
 
-                    <form action="{{ route('cadastrarTarefa') }}" method="post">
+                    <form action="{{ route('tarefaRemoveDev') }}" method="post">
 
 
 
@@ -39,7 +35,7 @@
 
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Devs</label>
-                            <select class="form-select" name="selectDevInserir" id="selectDevInserir"
+                            <select class="form-select" name="id" id="selectDevInserir"
                                 aria-label="Default select example">
                                 @foreach ($tarefas as $item)
                                     <option value={{ $item->id ?? old('projeto_id') }}>{{ $item->nome ?? '' }}</option>
@@ -55,7 +51,7 @@
 </textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary">Remover</button>
 
                     </form>
                 </div>

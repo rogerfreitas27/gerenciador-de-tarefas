@@ -2,16 +2,20 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+ use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Service\TarefaService;
+use App\Service\TarefaUsuarioService;
+
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The model to policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
+    
+
+
+
+
+
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
@@ -25,6 +29,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('access-menu-usuario',function($user){
+
+                 if($user->tipo_usuario_id==1){ return true;  }
+                
+        });
+
+        
+       
+
+
+
+             
     }
 }

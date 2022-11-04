@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Tarefa;
+use App\Models\TipoUsuario;
 
 class User extends Authenticatable
 {
@@ -18,9 +20,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
         'password',
+        'tipo_usuario_id'
     ];
 
     /**
@@ -29,18 +32,21 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+        'password'
+       
     ];
 
     
+    
+    
+    public function tarefaUsuario(){
+        return $this->belongsToMany(Tarefa::class,'tarefa_usuarios','usuario_id','tarefa_id');
+      }
+
+
+      public function relTipoUsuario()   {
+       return $this->hasOne(TipoUsuario::class,'id','tipo_usuario_id');
+    } 
+
+
 }

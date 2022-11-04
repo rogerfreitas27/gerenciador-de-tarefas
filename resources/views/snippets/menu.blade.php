@@ -8,8 +8,20 @@
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/projeto">Projetos</a>
         <a class="nav-link" href="/tarefa">Tarefas</a>
-        <a class="nav-link" href="/usuario">Usuarios</a>
+       
+       
+           
+       
+       
+                  
+        @can('access-menu-usuario')       <a class="nav-link" href="/usuario">Usuarios</a>  @endcan
         </div>
     </div>
+    <form action="{{ route('logout') }}" method="get" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="hidden" placeholder="Pesquisar" aria-label="Pesquisar">
+     
+      <button class="btn btn-primary" type="submit">logout</button>
+     
+    </form>
   </div>
 </nav>

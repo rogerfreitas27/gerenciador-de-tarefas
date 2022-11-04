@@ -49,12 +49,12 @@
 
                     <br />
                     <input type="hidden" id="id" name="id" value="{{ $tarefa->id ?? old('id') }}"
-                        formControlName="id">
+                        >
                     @csrf
                     <div class="row">
 
-
-                        <div class="col-md-4">
+                        
+                        <div class="col-md-4"> @can('access-menu-usuario') 
                             <label for="nome_marca">Projeto:</label>
                             <div class="input-group">
                                 <select class="form-select" name="projeto_id" aria-label="Default select example">
@@ -72,7 +72,7 @@
 
 
 
-                        </div>
+                            @endcan  </div>
 
                         <div class="col-md-4">
                             <label for="nome_marca">Status:</label>
@@ -95,18 +95,18 @@
 
 
 
-                        <div class="col-md-4">
+                        <div class="col-md-4"> @can('access-menu-usuario')
                             <label for="nome_marca">Nome:</label>
                             <input type="text" class="form-control" value="{{ $tarefa->nome ?? old('nome') }}"
                                 name="nome" placeholder="Cadastrar tarefa">
-                        </div>
+                                @endcan   </div>
 
 
 
                     </div>
 
 
-                    <br />
+                    <br />@can('access-menu-usuario')
                     <div class="row">
                         <div class="col-md-12">
 
@@ -116,7 +116,7 @@
 
                         </div>
 
-                    </div>
+                    </div>  @endcan 
                     <br />
 
                     <button type="submit" class="btn btn-primary">Salvar</button>

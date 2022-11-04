@@ -2,28 +2,28 @@
 
 namespace App\Service;
 use Illuminate\Support\Facades\DB;
-use App\Models\Usuario;
+use App\Models\User;
 use App\Models\TipoUsuario;
-use App\Models\UsuarioTarefa;
+use App\Models\TarefaUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UsuarioService {
-      private Usuario $userModel;
+class UserService {
+      private User $userModel;
   
-  public function __construct(Usuario $usuarioModel) 
-  {   $this-> usuarioModel =  $usuarioModel; }
+  public function __construct(User $userModel) 
+  {   $this-> userModel =  $userModel; }
 
   public function findAll()   {  
-         $usuarios = $this->usuarioModel = Usuario::all();
+         $usuarios  = User::all();
          return $usuarios;
         }
 
-  public function findById($id){   return Usuario::find($id);   }
+  public function findById($id){   return User::find($id);   }
 
   public function findAllPagination(Request $request){
          $search = $request->search;
-         $usuarios = Usuario::where(function($query) use($search){
+         $usuarios = User::where(function($query) use($search){
          if($search){
          $query ->where('nome','LIKE',"%{$search}%");
          $query ->orwhere('email','LIKE',"%{$search}%");
@@ -37,11 +37,11 @@ class UsuarioService {
 public function saveUser(Request $request){  
        $data = $request->all();
        $data['password']=bcrypt($request->password);
-       $usuario =  Usuario::create($data); 
+       $usuario =  User::create($data); 
        return $usuario; 
    }
 
-public function updateUser(Usuario $usuario,Request $request){ 
+public function updateUser(User $usuario,Request $request){ 
        if (!$request->password) { unset($request['password']); }
        else
        $request['password']= bcrypt($request->password);
@@ -50,10 +50,10 @@ public function updateUser(Usuario $usuario,Request $request){
       }
 
 public function loadUsuarioTarefaRemove($id){
-      $data = DB::table('usuarios')
-      ->join('tarefa_usuarios', 'usuarios.id', '=', 'tarefa_usuarios.usuario_id')
+      $data = DB::table('users')
+      ->join('tarefa_usuarios', 'users.id', '=', 'tarefa_usuarios.user_id')
       ->join('tarefas', 'tarefas.id', '=', 'tarefa_usuarios.tarefa_id')
-      ->select('usuarios.id AS usuario', 'usuarios.nome', 'tarefa_usuarios.id')
+      ->select('users.id AS usuario', 'users.nome', 'tarefa_usuarios.id')
       ->where('tarefa_usuarios.tarefa_id','=',"{$id}")
       ->get();
       return $data;
@@ -61,13 +61,29 @@ public function loadUsuarioTarefaRemove($id){
 
 
 public function loadUsuarioTarefaAddDev($id){
-     $dados = UsuarioTarefa::find($id);
-     dd($dados);
+   $data = DB::table('tarefa_usuarios')
+   ->select('tarefa_usuarios.user_id')
+   ->where('tarefa_id','=',"{$id}")
+   ->distinct()
+   ->get();
+ 
+  
+   return $result = User::whereNotIn('id', $this->converterArrayDeObetosEmArrayDeInteiros($data))->get(); 
 
+   
 }
 
+public function converterArrayDeObetosEmArrayDeInteiros($data){
+
+$qtd = count($data);
+  $dados = array();
+  for($i=0;$i<$qtd;$i++){
+       $dados[]=  $data[$i]->user_id;
+      } 
+  return $dados;
+}
 public function delete($id){
-     Usuario::findOrFail($id)->delete();
+     User::findOrFail($id)->delete();
 }
      
 

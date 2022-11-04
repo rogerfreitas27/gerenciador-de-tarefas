@@ -50,7 +50,7 @@ class Projeto extends Model
     
 
     public function relTarefa(){
-        return $this->hasMany('App\Model\Projeto');
+        return $this->hasMany('App\Models\Projeto');
     }
 
 }

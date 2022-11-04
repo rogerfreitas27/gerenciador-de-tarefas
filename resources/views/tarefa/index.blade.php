@@ -27,11 +27,11 @@
     </div> 
     <div class="col-md-4">
         <div class="form-group">
-        <div class=text-right>
+          @can('access-menu-usuario')   <div class=text-right>
           <a href="{{ route('cadastro-tarefa') }}" >
             <button type="button" class="btn btn-primary">Nova Tarefa</button
             ></a>
-        </div>
+        </div> @endcan
     </div>
 </div>
 
@@ -54,11 +54,11 @@
             <tr>
               <th>NOME</th>
               <th>STATUS</th>
-              <th>PROJETO</th>
+              
               <th>EDITAR</th>
-              <th>DELETAR</th>
-              <th>ADD DEV</th>
-              <th>REMOVE DEV</th>
+  @can('access-menu-usuario') <th>DELETAR</th>
+                             <th>ADD DEV</th>
+                              <th>REMOVE DEV</th> @endcan
             </tr>
           </thead>
 		  
@@ -67,30 +67,30 @@
             <tr >
               <th scope="row">{{ $tarefa->nome}}</th>
               <td>{{ $tarefa->status }}</td>
-              <td>{{ $tarefa->relProjeto->nome}}</td>
+              
               <td><a class="btn btn-primary"  href="{{ route('edita-tarefa',$tarefa->id) }}"  ><i class="fa fa-lg fa-edit"
                     title="Editar"></i></a></td>              
-              <td>
+                    @can('access-menu-usuario')         <td>
                 <form action="{{ route('deleta-tarefa',$tarefa->id) }}" method="POST">  
                   @csrf
                   @method('DELETE')
                   <button class="btn btn-danger" type="submit"><i class="fa fa-lg fa-trash"
                     title="Deletar"></i></button>            
                    </form>
-                </td>
+                  </td>
                   
                   
                   
                   
                   
-                    <td><a class="btn btn-success"  href="{{ route('tarefaAddDev',$tarefa->id) }}"> <i class="fa fa-lg fa-plus"
-                      title="Deletar"></i></a></td>
+                    <td> <a class="btn btn-success"  href="{{ route('view-tarefaAddDev',$tarefa->id) }}"> <i class="fa fa-lg fa-plus"
+                      title="Deletar"></i></a>  </td>
                       
                       
                       
                       
-                      <td><a class="btn btn-danger"  href="{{ route('tarefaRemoveDev',$tarefa->id) }}" > <i class="fa fa-lg fa-minus"
-                        title="Deletar"></i></a></td>
+                      <td> <a class="btn btn-danger"  href="{{ route('view-tarefaRemoveDev',$tarefa->id) }}" > <i class="fa fa-lg fa-minus"
+                        title="Deletar"></i></a>    </td> @endcan
             </tr>           
           @endforeach
             

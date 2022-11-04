@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Service\ProjetoService;
 use App\Models\Tarefa;
 use  App\Http\Requests\CriarAtualizarProjetoFormRequest;
+
 
 class ProjetoController extends Controller
 {   
@@ -18,7 +18,7 @@ class ProjetoController extends Controller
 
 
    function index(Request $request){
-          $projetos =  $this-> projetoService->findAllPagination($request);         
+          $projetos =  $this-> projetoService->selectTypeUserAndReturn($request);                 
           return view('projeto.index' ,compact('projetos'));
     }
 
@@ -41,6 +41,7 @@ class ProjetoController extends Controller
      
    function editarProjeto(CriarAtualizarProjetoFormRequest $request){        
             $projeto = $this-> projetoService->updateProject( $request);
+           
             return view('projeto.cadastro',compact('projeto'));
      }
 
@@ -48,4 +49,12 @@ class ProjetoController extends Controller
             $this-> projetoService->delete($id);
             return redirect()->route('projeto.index')->with('msg','Projeto excluido com sucesso');
      }
+
+   
+
+
+
 }
+
+
+

@@ -27,14 +27,11 @@
     </div> 
     <div class="col-md-4">
         <div class="form-group">
-        <div class=text-right>
+          @can('access-menu-usuario')      <div class=text-right>
           <a href="{{ route('cadastro-projeto') }}" >
             <button type="button" class="btn btn-primary">Novo Projeto</button
-            ></a>
-
-
-       
-        </div>
+            ></a>       
+        </div>@endcan
     </div>
 </div>
 
@@ -58,28 +55,32 @@
               <th>ID</th>
               <th>NOME</th>
               <th>PERCENTUAL</th>
-              <th>EDITAR</th>
-              <th>DELETAR</th>
+              @can('access-menu-usuario')     <th>EDITAR</th> 
+              <th>DELETAR</th> @endcan
               <!-- <th>EXCLUIR</th> -->
             </tr>
           </thead>
 		  
           <tbody>
             @foreach($projetos as $projeto)
-            <tr >
-              <th scope="row">{{ $projeto->id }}</th>
-              <td>{{ $projeto->nome }}</td>
-              <td>{{ $projeto->email }}</td>
-              <td><a class="btn btn-primary"  href="{{ route('edita-projeto',$projeto->id) }}"  ><i class="fa fa-lg fa-edit"
-                    title="Editar"></i></a></td>              
-              <td>
+            <tr >           
+            <th scope="row">{{ $projeto->id }}</th>
+            <td>{{ $projeto->nome }}</td>
+            <td>{{ $projeto->email }}</td>                        
+            @can('access-menu-usuario') 
+             <td>
+                  <a class="btn btn-primary"  href="{{ route('edita-projeto',$projeto->id) }}"  ><i class="fa fa-lg fa-edit"
+                    title="Editar"></i></a>
+                    </td>               
+              <td> 
                 <form action="{{ route('deleta-projeto',$projeto->id) }}" method="POST">  
                   @csrf
                   @method('DELETE')
                   <button class="btn btn-danger" type="submit"><i class="fa fa-lg fa-trash"
-                    title="Deletar"></i></button>            
-                   </form>   
-        </td>
+                    title="Deletar"></i>
+                  </button>            
+                     </form>   
+              </td> @endcan
             </tr>           
           @endforeach
             
