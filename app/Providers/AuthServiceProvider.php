@@ -36,7 +36,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         
-       
+        Gate::define('access-pesquisa-projeto',function($user){
+
+            if($user->tipo_usuario_id==2){ return true;  }
+           
+   });
 
 
 

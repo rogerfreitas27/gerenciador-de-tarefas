@@ -32,56 +32,96 @@ class TarefaController extends Controller
     }
 
    function viewCadastro(){
+    try { 
              $projetos = $this->projetoService->findAll();
              return view('tarefa.cadastro',compact('projetos'));
+            }catch (Exception $e) {
+              return view('usuario.index')->withErrors($e->getMessage());
+            }
      }
 
               
    function cadastrarTarefa(CriarAtualizarTarefaFormRequest $request){ 
+
+    try { 
              $tarefa = $this-> tarefaService->saveTarefa($request);
-             return  redirect()->route('tarefa.index');
+             return  redirect()->route('tarefa.index')->with('mensagem','Tarefa cadastrada com sucesso');
+            }catch (Exception $e) {
+              return view('usuario.index')->withErrors($e->getMessage());
+        }
       }
 
-   function viewEditar($id){
+   function viewEditar($id){   
             if(!$tarefa = $this-> tarefaService->findById($id))
             return redirect()->route('tarefa.index');             
             $projetos = $this->projetoService->findAll();        
-            return view('tarefa.cadastro',compact('tarefa','projetos'));
-       }
+            return view('tarefa.cadastro',compact('tarefa','projetos'))->withErrors($e->getMessage());
+         
+          }
 
-   public function editarTarefa(CriarAtualizarTarefaFormRequest $request){   
+   public function editarTarefa(CriarAtualizarTarefaFormRequest $request){
+   
+    try {     
              $tarefa = $this->tarefaService->updaTetarefa($request); 
              $projetos = $this->projetoService->findAll(); 
-             return view('tarefa.cadastro',compact('tarefa','projetos'));
+             return view('tarefa.cadastro',compact('tarefa','projetos'))->with('mensagem','Tarefa atualizada com sucesso');
+            }catch (Exception $e) {
+              return view('tarefa.cadastro')->withErrors($e->getMessage());
+        }
+           
             }
 
    public  function  viewAdicionarDevTarefa($id){
+
+    try { 
             $tarefas = $this->usuarioService->loadUsuarioTarefaRemove($id); 
             $usuarios = $this->usuarioService->loadUsuarioTarefaAddDev($id);
             return view('tarefa.addDev',compact('tarefas','usuarios','id'));
+
+          }catch (Exception $e) {
+            return view('tarefa.addDev',compact('tarefas','usuarios','id'))->withErrors($e->getMessage());
+      }
+
+
             }
 
   public  function  viewRemoverDevTarefa($id){
+
+    try{
             $tarefas = $this->usuarioService->loadUsuarioTarefaRemove($id);       
             return view('tarefa.removeDev',compact('tarefas'));
+          }catch (Exception $e) {
+            return view('tarefa.removeDev',compact('tarefas'))->withErrors($e->getMessage());
+      }
             }
 public  function  AdicionarDevTarefa(CriarAtualizarTarefaUsuarioFormRequest $request){
-           
+  try{
             $data = $this->tarefaUsuarioService->save($request->all());
             $tarefas = $this->usuarioService->loadUsuarioTarefaRemove($data->tarefa_id); 
             $usuarios = $this->usuarioService->loadUsuarioTarefaAddDev($data->tarefa_id);
             $id = $data->tarefa_id;
-            return view('tarefa.addDev',compact('tarefas','usuarios','id'));
+            return view('tarefa.addDev',compact('tarefas','usuarios','id'))->with('mensagem','Dev adicionado com sucesso');
+          }catch (Exception $e) {
+            return view('tarefa.addDev',compact('tarefas','usuarios','id'))->withErrors($e->getMessage());
+      }
             }
           
     public  function  RemoverDevTarefa(Request $request){
+      try{
            $retorno = $this->tarefaUsuarioService-> delete($request->id);      
-           return redirect()->route('tarefa.index')->with('msg','Usuario removido da tarefa com sucesso');         
-            }
+           return redirect()->route('tarefa.index')->with('mensagem','Dev removido  com sucesso');         
+          }catch (Exception $e) {
+            return redirect()->route('tarefa.index')->withErrors($e->getMessage());
+      }
+          }
 
    public function delete($id){
+    try{
             $this-> tarefaService->delete($id);
-            return redirect()->route('tarefa.index')->with('msg','Tarefa excluida com sucesso');
+            return redirect()->route('tarefa.index')->with('mensagem','Tarefa excluida com sucesso');    
+          }catch (Exception $e) {
+            return redirect()->route('tarefa.index')->withErrors($e->getMessage());
+      }
           }
 
 

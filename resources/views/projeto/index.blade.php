@@ -14,7 +14,7 @@
 <div class="container">
 
 <div class="row">  
-    <div class="col-md-7">
+  @can('access-pesquisa-projeto')     <div class="col-md-7">
       <form action="{{route('projeto.index')}}" method="get">
         <div class="input-group">
           
@@ -24,7 +24,7 @@
             </div>
           
           </div></form>
-    </div> 
+    </div> @endcan
     <div class="col-md-4">
         <div class="form-group">
           @can('access-menu-usuario')      <div class=text-right>
@@ -45,6 +45,17 @@
 <section>
 <div class="container">
 <div class="card">
+
+  <div class="card-header">
+    
+    @include('snippets.error')
+    @if(session('mensagem'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+     <strong>{{session('mensagem')}}</strong>
+     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   @endif
+</div>
     <div class="card-body">
       
       
@@ -66,7 +77,7 @@
             <tr >           
             <th scope="row">{{ $projeto->id }}</th>
             <td>{{ $projeto->nome }}</td>
-            <td>{{ $projeto->email }}</td>                        
+            <td><progress value="{{ $projeto->Qtd_tarefas_concluidas }}" max="{{ $projeto->Qtd_tarefas }}"></progress></td>                        
             @can('access-menu-usuario') 
              <td>
                   <a class="btn btn-primary"  href="{{ route('edita-projeto',$projeto->id) }}"  ><i class="fa fa-lg fa-edit"

@@ -25,7 +25,7 @@ class UsuarioController extends Controller
         $usuarios =  $this-> usuarioService->findAllPagination($request);
         return view('usuario/index', compact('usuarios'));
     }catch (Exception $e) {
-      return view('usuario/index')->with('error',$e->getMessage());
+      return view('usuario/index')->withErrors($e->getMessage());
     }
     }
 
@@ -34,7 +34,7 @@ class UsuarioController extends Controller
       $tipoUsuarios = TipoUsuario::get();             
           return view('usuario.cadastro',compact('tipoUsuarios'));
         }catch (Exception $e) {
-          return view('usuario.cadastro')->with('error',$e->getMessage());
+          return view('usuario.cadastro')->withErrors($e->getMessage());
         }
      }
 
@@ -43,9 +43,9 @@ class UsuarioController extends Controller
       try {         
               $usuarios =  $this-> usuarioService->saveUser($request);
               return  redirect()->route('usuario.index'); 
-              return view('usuario.cadastro')->with('msg','Cadastro realizado com sucesso');
+              return view('usuario.cadastro')->with('mensagem','Cadastro realizado com sucesso');
             }catch (Exception $e) {
-              return view('usuario.cadastro')->with('error',$e->getMessage());
+              return view('usuario.cadastro')->withErrors($e->getMessage());
             }
           }
             
@@ -57,7 +57,7 @@ class UsuarioController extends Controller
             $tipoUsuarios = TipoUsuario::get();
             return view('usuario.editar',compact('usuario','tipoUsuarios'));
           }catch (Exception $e) {
-          return view('usuario.editar')->with('error',$e->getMessage());
+          return view('usuario.editar')->withErrors($e->getMessage());
           }
     }
                                
@@ -67,16 +67,20 @@ class UsuarioController extends Controller
              if(!$usuario = $this-> usuarioService->findById($request->id))  
              return redirect()->route('usuario.index');       
              $usuario= $this-> usuarioService->updateUser($usuario,$request);        
-            return  redirect()->route('usuario.index');
+            return  redirect()->route('usuario.index')->with('mensagem','Cadastro atualizado com sucesso');;
 
           }catch (Exception $e) {
-            return view('usuario.editar')->with('msg',$e->getMessage());
+            return view('usuario.editar')->withErrors($e->getMessage());
             }
 
       }
 
     function delete($id){
+      try { 
              $this-> usuarioService->delete($id);
-             return redirect()->route('usuario.index')->with('msg','Usuario excluido com sucesso');
-     }
+             return redirect()->route('usuario.index')->with('mensagem','Usuario excluido com sucesso');
+            }catch (Exception $e) {
+              return view('usuario.index')->withErrors($e->getMessage());
+            }
+            }
 }

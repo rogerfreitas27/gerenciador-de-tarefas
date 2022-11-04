@@ -18,17 +18,25 @@ class ProjetoController extends Controller
 
 
    function index(Request $request){
-          $projetos =  $this-> projetoService->selectTypeUserAndReturn($request);                 
+       try{
+          $projetos =  $this-> projetoService->selectTypeUserAndReturn($request);                         
           return view('projeto.index' ,compact('projetos'));
+       }catch (Exception $e) {
+              return view('projeto.index' ,compact('projetos'))->withErrors($e->getMessage());
+            }
     }
 
    function viewCadastro(){                  
            return view('projeto.cadastro');        
      }
 
-   function cadastrarProjeto(CriarAtualizarProjetoFormRequest $request){     
+   function cadastrarProjeto(CriarAtualizarProjetoFormRequest $request){ 
+try{
             $projeto =  $this-> projetoService->saveProject($request);
-            return view('projeto.cadastro',compact('projeto')); 
+            return view('projeto.cadastro',compact('projeto'))->with('mensagem','Projeto cadastrado com sucesso');
+       }catch (Exception $e) {
+              return view('projeto.cadastro',compact('projeto'))->withErrors($e->getMessage());
+            } 
      }
 
 
@@ -39,15 +47,23 @@ class ProjetoController extends Controller
      }
          
      
-   function editarProjeto(CriarAtualizarProjetoFormRequest $request){        
-            $projeto = $this-> projetoService->updateProject( $request);
-           
-            return view('projeto.cadastro',compact('projeto'));
+   function editarProjeto(CriarAtualizarProjetoFormRequest $request){ 
+       
+       try{
+            $projeto = $this-> projetoService->updateProject( $request);           
+            return view('projeto.cadastro',compact('projeto'))->with('mensagem','Projeto atualizado com sucesso');
+       }catch (Exception $e) {
+              return  view('projeto.cadastro',compact('projeto'))->withErrors($e->getMessage());
+            } 
      }
 
    public function delete($id){
+       try{
             $this-> projetoService->delete($id);
-            return redirect()->route('projeto.index')->with('msg','Projeto excluido com sucesso');
+            return redirect()->route('projeto.index')->with('mensagem','Projeto excluido com sucesso');
+       }catch (Exception $e) {
+              return  view('projeto.index',compact('projeto'))->withErrors($e->getMessage());
+            } 
      }
 
    

@@ -48,9 +48,9 @@ class Projeto extends Model
     {   return $this->hasOne(ProjetoUsuario::class,'id','projeto_id');} 
 
     
-
+    
     public function relTarefa(){
-        return $this->hasMany('App\Models\Projeto');
+        return $this->hasMany(Tarefa::class,'id','projeto_id');
     }
-
+//App\Models\Projeto
 }

@@ -13,12 +13,12 @@
           <div class="card-header">
            <h2>Cadastro de Usuario</h2>
          @include('snippets.error')
-         @if (isset($error))                     
-         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>{{$error}}</strong> 
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>              
-           @endif
+         @if(session('mensagem'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{session('mensagem')}}</strong>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>
+        @endif
 
 
 

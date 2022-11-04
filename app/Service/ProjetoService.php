@@ -1,9 +1,12 @@
 <?php
 namespace App\Service;
 use App\Models\Projeto;
+use App\Models\Tarefa;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class ProjetoService { 
 
@@ -35,7 +38,8 @@ public function delete($id){ Projeto::findOrFail($id)->delete(); }
 public function selectTypeUserAndReturn(Request $request){
     
          if(Auth::user()->tipo_usuario_id==1)
-      { return $projetos = $this->findAllPagination($request);}
+
+      {   return $projetos = $this->findAllPagination($request);}
 
         $projetos = $this->findAllPaginationDev($request,Auth::user()->id);
           return $projetos;
@@ -59,12 +63,22 @@ public function selectTypeUserAndReturn(Request $request){
     
  }
 
+
 public function findAllPagination(Request $request){
-        $search = $request->search;      
-        $projetos = Projeto::where(function($query) use($search){
-         if($search){$query ->where('nome','LIKE',"%{$search}%");}
-         })->paginate(5);
-         return $projetos;      
+     $search = $request->search; 
+     $data = Projeto::addSelect([           
+            'Qtd_tarefas' => Tarefa::selectRaw('COUNT(tarefas.projeto_id) ')
+               ->whereColumn('tarefas.projeto_id', 'projetos.id'),
+               'Qtd_tarefas_concluidas' => Tarefa::selectRaw('COUNT(tarefas.projeto_id) ')
+               ->whereColumn('tarefas.projeto_id', 'projetos.id')
+                ->where('tarefas.status','=','Concluida')  
+
+          ])->paginate(5);
+             
+
+          return $data;
+           
+                
       }      
       
 }
