@@ -23,7 +23,7 @@ class CriarAtualizarTarefaFormRequest extends FormRequest
      
 
         $rules = [
-            'nome'=>[
+               'nome'=>[
                'required',
                'string',
                'min:3',

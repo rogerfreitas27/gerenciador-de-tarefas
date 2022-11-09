@@ -19,15 +19,14 @@ class CriarAtualizarProjetoFormRequest extends FormRequest
      */
     public function rules()
     {
-       $id=$this->id ?? '';
-     
+          $id=$this->id ?? '';    
 
         $rules = [
             'nome'=>[
-               'required',
-               'string',
-               'min:3',
-               'max: 100'
+            'required',
+            'string',
+            'min:3',
+            'max: 100'
             ]              
         ];
 
@@ -37,17 +36,15 @@ class CriarAtualizarProjetoFormRequest extends FormRequest
         if($this->method()=='PUT'){
          
          $rules['nome']=[
-            'required',
-            'string',
-            'min:3',
-            'max: 100'            
-         ];
+               'required',
+               'string',
+               'min:3',
+               'max: 100'            
+               ];
          $rules['id']=[
             'required',
             'numeric'                        
-         ];
-
-            
+              ];            
         }
         return $rules;
     }  

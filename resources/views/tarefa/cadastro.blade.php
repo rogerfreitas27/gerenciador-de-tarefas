@@ -88,7 +88,7 @@
                                         {{ $tarefa->status ?? old('status') }}</option>
                                     <option value="Em andamento">Em andamento</option>
                                     <option value="Pendente">Pendente</option>
-                                    <option value="Concluido">Concluido</option>
+                                    <option value="Concluida">Concluido</option>
                                 </select>
 
                             </div>
