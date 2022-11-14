@@ -14,15 +14,15 @@
             <div class="card text-center">
                 <div class="card-header">
                     <h2>
-                       Remover Dev
+                        Remover Dev
                     </h2>
                     @include('snippets.error')
-    @if(session('mensagem'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-     <strong>{{session('mensagem')}}</strong>
-     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-   </div>
-   @endif
+                    @if (session('mensagem'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>{{ session('mensagem') }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                 </div>
                 <div class="card-body">
 

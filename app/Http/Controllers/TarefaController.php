@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Service\ProjetoService;
 use App\Service\TarefaService;
-use  App\Http\Requests\CriarAtualizarTarefaFormRequest;
-use  App\Http\Requests\CriarAtualizarTarefaUsuarioFormRequest;
+use App\Http\Requests\CriarAtualizarTarefaFormRequest;
+use App\Http\Requests\CriarAtualizarTarefaUsuarioFormRequest;
 use App\Service\UserService;
 use App\Service\TarefaUsuarioService;
 
@@ -47,7 +47,7 @@ class TarefaController extends Controller
         try { 
                $tarefa = $this-> tarefaService->saveTarefa($request);
                return  redirect()->route('tarefa.index')->with('mensagem','Tarefa cadastrada com sucesso');
-            } catch (Exception $e) {
+        } catch (Exception $e) {
               return view('usuario.index')->withErrors($e->getMessage());
         }
     }

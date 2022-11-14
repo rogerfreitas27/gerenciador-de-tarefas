@@ -49,10 +49,9 @@ class CriarAtualizarUsuarioFormRequest extends FormRequest
                 'required'=>'Campo :attribute obrigatório',
                 'string'=>'Apenas letras',
                 'min'=>'Minimo de :min caracteres',
-                'max'=>'Maximo de :max caracteres',           
+                'max'=>'Campo :attribute maximo de :max caracteres',           
                 'email'=>'Email invalido',
                 'unique'=>'Email já cadastrado',
-                'max'=>'Maximo de :max caracteres',
                 'numeric'=>'Campo :attribute sem valor informado'
            
 

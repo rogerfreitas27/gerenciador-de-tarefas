@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Tarefa;
 use App\Models\TipoUsuario;
+use App\Exceptions\RegraNegocioException;
 
 class User extends Authenticatable
 {
@@ -37,7 +38,14 @@ class User extends Authenticatable
     ];
 
     
-    
+    public function setPasswordAttribute($password)
+{
+    if ( $password == null or $password == "" )
+    {  
+        throw new RegraNegocioException('Atributo senha não pode ser nulo ou vazio');
+    }
+    $this->attributes['password'] = bcrypt($password);
+}
     
     public function tarefaUsuario(){
         return $this->belongsToMany(Tarefa::class,'tarefa_usuarios','usuario_id','tarefa_id');
