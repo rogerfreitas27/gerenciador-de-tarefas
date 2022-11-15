@@ -1,17 +1,38 @@
+## First stage. Copy project files and run composer
+FROM composer:2 as composer_stage
+
+RUN rm -rf /var/www && mkdir -p /var/www/html
+WORKDIR /var/www/html
+
+COPY composer.json composer.lock symfony.lock .env ./
+COPY public public/
+
+RUN composer install --ignore-platform-reqs --prefer-dist --no-scripts --no-progress --no-suggest --no-interaction --no-dev --no-autoloader
+
+RUN composer dump-autoload --optimize --apcu --no-dev
+
+COPY bin bin/
+COPY config config/
+COPY src src/
+RUN composer run-script $NODEV post-install-cmd; \
+    chmod +x bin/console;
+
+
+FROM node:16 as npm_builder
+
+COPY --from=composer_stage /var/www/html /var/www/html
+
+WORKDIR /var/www/html
+COPY yarn.lock package.json webpack.config.js ./
+COPY assets ./assets
+
+RUN yarn install
+RUN yarn encore prod
 
 # Especifica uma das imagens utilizadas
 FROM wyveo/nginx-php-fpm:php81
 
 
-# Install Composer
-COPY composer.json composer.lock ./
-
-# This are production settings, I'm running with 'no-dev', adjust accordingly 
-# if you need it
-#RUN composer install --ignore-platform-reqs --prefer-dist --no-scripts --no-progress --no-interaction --no-dev --no-autoloader
-#Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-#RUN composer dump-autoload 
 # Define o diretório principal do container como o diretório do Nginx
 WORKDIR /usr/share/nginx/
 
