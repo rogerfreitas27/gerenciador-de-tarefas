@@ -4,7 +4,14 @@ FROM wyveo/nginx-php-fpm:php81
 
 
 # Install Composer
+COPY composer.json composer.lock ./
+
+# This are production settings, I'm running with 'no-dev', adjust accordingly 
+# if you need it
+#RUN composer install --ignore-platform-reqs --prefer-dist --no-scripts --no-progress --no-interaction --no-dev --no-autoloader
+#Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#RUN composer dump-autoload 
 # Define o diretório principal do container como o diretório do Nginx
 WORKDIR /usr/share/nginx/
 
