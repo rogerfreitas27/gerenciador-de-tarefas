@@ -4,7 +4,7 @@ FROM composer:2 as composer_stage
 RUN rm -rf /var/www && mkdir -p /var/www/html
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock .env ./
+COPY composer.json composer.lock ./
 COPY public public/
 
 RUN composer install --ignore-platform-reqs --prefer-dist --no-scripts --no-progress --no-suggest --no-interaction --no-dev --no-autoloader
