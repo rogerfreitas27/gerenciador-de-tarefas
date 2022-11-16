@@ -1,42 +1,37 @@
-## First stage. Copy project files and run composer
-FROM composer:2 as composer_stage
+FROM php:8.1-fpm
 
-RUN rm -rf /var/www && mkdir -p /var/www/html
-WORKDIR /var/www/html
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
 
-COPY composer.json composer.lock ./
-COPY public public/
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
 
-RUN composer install --ignore-platform-reqs --prefer-dist --no-scripts --no-progress --no-suggest --no-interaction --no-dev --no-autoloader
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-#RUN composer dump-autoload --optimize --apcu --no-dev
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY bin bin/
-COPY config config/
-COPY src src/
-RUN composer run-script $NODEV post-install-cmd; \
-    chmod +x bin/console;
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-
-FROM node:16 as npm_builder
-
-COPY --from=composer_stage /var/www/html /var/www/html
-
-WORKDIR /var/www/html
-COPY yarn.lock package.json webpack.config.js ./
-COPY assets ./assets
-
-RUN yarn install
-RUN yarn encore prod
-
-# Especifica uma das imagens utilizadas
-FROM wyveo/nginx-php-fpm:php81
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
 
 
-# Define o diretório principal do container como o diretório do Nginx
-WORKDIR /usr/share/nginx/
+# Set working directory
+WORKDIR /var/www
 
-# Troca a configuração padrão do Nginx pela nossa
+USER $user
 
-COPY ./.docker/nginx/default.conf  /etc/nginx/conf.d/default.conf
-
+EXPOSE 9005
